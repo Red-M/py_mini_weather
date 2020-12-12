@@ -1,2 +1,5 @@
+pyyaml
 adafruit-circuitpython-bme280
+adafruit-circuitpython-bme680
 cherrypy
+automodinit
