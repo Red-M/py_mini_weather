@@ -14,9 +14,11 @@ class Sensor(object):
 
     def poll(self):
         while True:
+            # print('Start Poll: '+str(self))
             self.wakeup()
             self.queue.put(self.read())
             self.sleep()
+            # print('End Poll: '+str(self))
             time.sleep(self.device_sleep)
 
 class BME2680Sensor(Sensor):

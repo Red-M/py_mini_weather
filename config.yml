@@ -1,5 +1,5 @@
 
-collector_poll_time: 5
+collector_poll_time: 3
 devices:
   - bme680
   - pms5003

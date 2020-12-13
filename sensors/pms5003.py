@@ -5,8 +5,12 @@ class pms5003(base_sensor.Sensor):
     def __init__(self, queue):
         super().__init__(queue)
 
-    def conn_serial_port(self, device):
-        self.serial = serial.Serial(device, baudrate=9600)
+    def wakeup(self):
+        self.serial = serial.Serial('/dev/ttyAMA0', baudrate=9600)
+
+    def sleep(self):
+        self.serial.close()
+        del self.serial
 
     def check_keyword(self):
         while True:
@@ -40,17 +44,15 @@ class pms5003(base_sensor.Sensor):
         pm25 = int(data_hex[20]+data_hex[21]+data_hex[22]+data_hex[23],16)
         pm10 = int(data_hex[24]+data_hex[25]+data_hex[26]+data_hex[27],16)
         data = [pm1_cf,pm25_cf,pm10_cf,pm1,pm25,pm10]
-        self.serial.close()
         return(data)
 
-    def read_sensor(self, tty):
-        self.conn_serial_port(tty)
-        if self.check_keyword() == True:
-            self.data = self.read_data()
-            return(self.data)
+    def read_sensor(self):
+        if self.check_keyword()==True:
+            data = self.read_data()
+            return(data)
 
     def read(self):
-        pmdata = self.read_sensor('/dev/ttyS0')
+        pmdata = self.read_sensor()
         out = {
             'PM1':pmdata[0],
             'PM2.5':pmdata[1],
