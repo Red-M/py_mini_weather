@@ -6,7 +6,15 @@ class Sensor(object):
         self.device_sleep = 10
         self.queue = queue
 
+    def wakeup(self):
+        pass
+
+    def sleep(self):
+        pass
+
     def poll(self):
         while True:
+            self.wakeup()
             self.queue.put(self.read())
+            self.sleep()
             time.sleep(self.device_sleep)

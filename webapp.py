@@ -24,14 +24,16 @@ class SensorServ:
         f.close()
 
     def start_collector(self):
-        self.collector_process = multiprocessing.Process(target=self.collector)
+        self.collector_thread = threading.Thread(target=self.collector)
         not_sensors = ['modules','os', 'glob']
         self.active_sensors = []
-        for sensor in dir(sensors):
+        sensors_list = dir(sensors)
+        sensors_list.reverse()
+        for sensor in sensors_list:
             if not (sensor.startswith('_') or sensor in not_sensors):
                 if sensor in self.config['devices']:
                     self.active_sensors.append(sensor)
-        self.collector_process.start()
+        self.collector_thread.start()
 
     def collector(self):
         collector_data = {}
@@ -45,7 +47,7 @@ class SensorServ:
                     threads[sensor]['thread'] = threading.Thread(target=threads[sensor]['class'].poll)
                     threads[sensor]['thread'].start()
                 else:
-                    if threads[sensor]['thread'].is_alive()==False:
+                    if threads[sensor]['thread'].is_alive()==False and threads[sensor]['class'].auto_restart==True:
                         threads[sensor]['thread'].join(1)
                         del threads[sensor]
             ret = self.queue.get()
