@@ -1,5 +1,6 @@
 pyyaml
 adafruit-circuitpython-bme280
 adafruit-circuitpython-bme680
+py-sds011
 cherrypy
 automodinit

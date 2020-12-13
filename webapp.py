@@ -59,7 +59,7 @@ class SensorServ:
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
-    def get_air_stats(self):
+    def get_stats(self):
         if self.collector_queue.qsize()==1:
             self.sensor_data = self.collector_queue.get_nowait()
         return(self.sensor_data)
