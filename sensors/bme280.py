@@ -1,6 +1,6 @@
 from . import base_sensor
 
-class bme280(base_sensor.Sensor):
+class bme280(base_sensor.BME2680Sensor):
     def __init__(self, queue):
         super().__init__(queue)
         import board
@@ -11,15 +11,9 @@ class bme280(base_sensor.Sensor):
         self.adafruit_bme280 = adafruit_bme280
         self.i2c = self.busio.I2C(self.board.SCL, self.board.SDA)
         self.bme280 = self.adafruit_bme280.Adafruit_BME280_I2C(self.i2c)
+        self.bme = self.bme280
         self._REG_CTRL_MEAS = self.adafruit_bme280._BME280_REGISTER_CTRL_MEAS
         self.bme280.seaLevelhPa = 1014.5
-
-    def set_power_state(self, state):
-        if isinstance(state,type(False))==True:
-            temp = int.from_bytes(self.bme680._read(self._REG_CTRL_MEAS, 1), byteorder='big', signed=False)
-            temp &= ~0x03
-            temp |= state << 0
-            self.bme680._write(self._REG_CTRL_MEAS, [temp])
 
     def wakeup(self):
         self.set_power_state(True)

@@ -18,3 +18,12 @@ class Sensor(object):
             self.queue.put(self.read())
             self.sleep()
             time.sleep(self.device_sleep)
+
+class BME2680Sensor(Sensor):
+
+    def set_power_state(self, state):
+        if isinstance(state,type(False))==True:
+            temp = int.from_bytes(self.bme._read(self._REG_CTRL_MEAS, 1), byteorder='big', signed=False)
+            temp &= ~0x03
+            temp |= state << 0
+            self.bme680._write(self._REG_CTRL_MEAS, [temp])
