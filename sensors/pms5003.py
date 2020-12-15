@@ -2,11 +2,14 @@ import serial
 from . import base_sensor
 
 class pms5003(base_sensor.Sensor):
-    def __init__(self, queue):
-        super().__init__(queue)
+    def __init__(self, queue,config):
+        super().__init__(queue,config)
+        self.wakeup()
+        self.read_sensor()
+        self.sleep()
 
     def wakeup(self):
-        self.serial = serial.Serial('/dev/ttyAMA0', baudrate=9600)
+        self.serial = serial.Serial(self.config['port'], baudrate=9600)
 
     def sleep(self):
         self.serial.close()

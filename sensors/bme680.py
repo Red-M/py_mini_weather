@@ -1,8 +1,8 @@
 from . import base_sensor
 
 class bme680(base_sensor.BME2680Sensor):
-    def __init__(self, queue):
-        super().__init__(queue)
+    def __init__(self, queue,config):
+        super().__init__(queue,config)
         import board
         import busio
         import adafruit_bme680
@@ -14,7 +14,8 @@ class bme680(base_sensor.BME2680Sensor):
         self.bme = self.bme680
         self._REG_CTRL_MEAS = self.adafruit_bme680._BME680_REG_CTRL_MEAS
         self.bme680.seaLevelhPa = 1014.5
-        self.temperature_offset = -5
+        self.temperature_offset = self.config.get('temp_offset',-5)
+        self.read()
 
     def wakeup(self):
         self.set_power_state(True)

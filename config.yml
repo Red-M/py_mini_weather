@@ -2,4 +2,11 @@
 collector_poll_time: 3
 devices:
   - bme680
+  - sds011
   - pms5003
+
+device_config:
+  sds011:
+    port: '/dev/ttyUSB0'
+  pms5003:
+    port: '/dev/ttyAMA0'
